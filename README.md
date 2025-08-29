@@ -52,28 +52,20 @@ Requirements
 
 ### Backend (Windows PowerShell)
 
-Open PowerShell in the repo root and run:
+Open PowerShell in the repo root and run the following copy-pastable commands:
 
 ```powershell
 python -m venv backend/.venv
 backend/.venv/Scripts/python -m pip install --upgrade pip
 backend/.venv/Scripts/pip install -r backend/requirements.txt
 cd backend
-..\backend\.venv\Scripts\python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+./.venv/Scripts/python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Endpoints to check
 - Health: http://127.0.0.1:8000/health
 
-### Backend (macOS / Linux)
 
-```bash
-python3 -m venv backend/.venv
-backend/.venv/bin/python -m pip install --upgrade pip
-backend/.venv/bin/pip install -r backend/requirements.txt
-cd backend
-../backend/.venv/bin/python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
 
 ### Frontend (Vite + React)
 
