@@ -1,8 +1,12 @@
 import axios from 'axios'
 
-// Explicit backend address for local dev. Adjust if backend runs elsewhere.
-const API_BASE = 'http://127.0.0.1:8000'
-const client = axios.create({ baseURL: API_BASE, timeout: 5000 })
+// Use Vite env for API base in production; fall back to localhost for dev.
+// Configure Vercel/Render URL via VITE_API_BASE in environment.
+const apiBaseFromEnv = import.meta.env?.VITE_API_BASE
+const API_BASE = apiBaseFromEnv && apiBaseFromEnv.trim().length > 0
+  ? apiBaseFromEnv
+  : 'http://127.0.0.1:8000'
+const client = axios.create({ baseURL: API_BASE, timeout: 10000 })
 
 // Attach auth token if present
 client.interceptors.request.use((config) => {

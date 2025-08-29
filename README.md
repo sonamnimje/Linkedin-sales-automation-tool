@@ -81,6 +81,33 @@ Default app URL: http://127.0.0.1:5173
 Notes
 - The frontend calls the backend directly at `http://127.0.0.1:8000` (see `frontend/src/utils/api.js`). Ensure the backend is running locally or adjust the base URL.
 
+## Deploy (Render + Vercel)
+
+### 1) Backend on Render (FastAPI)
+
+There is a `render.yaml` at the repo root. This sets up a Python web service under `backend/` using Uvicorn.
+
+Steps:
+1. Push this repo to GitHub.
+2. In Render, create a new Web Service from your repo, or click “Blueprint” and point to `render.yaml`.
+3. On first deploy, leave `FRONTEND_ORIGIN` empty. After the frontend is live on Vercel, set `FRONTEND_ORIGIN` to `https://your-app.vercel.app` and redeploy to enable CORS.
+4. Once deployed, note your backend URL, e.g. `https://<service>.onrender.com`.
+
+Health check: `https://<service>.onrender.com/health`
+
+### 2) Frontend on Vercel (Vite + React)
+
+There is a `frontend/vercel.json` for Vercel. The frontend expects an env var `VITE_API_BASE`.
+
+Steps:
+1. In Vercel, “Import Project” → select the repo → set Root Directory to `frontend/`.
+2. Set Environment Variable: `VITE_API_BASE = https://<service>.onrender.com`.
+3. Deploy. Your site will be at `https://<project>.vercel.app`.
+
+After frontend is live, return to Render and set `FRONTEND_ORIGIN` to your Vercel URL to allow CORS.
+
+Local override: create `frontend/.env` with `VITE_API_BASE=http://127.0.0.1:8000` for local dev.
+
 ## API reference (important endpoints)
 
 - GET /health
