@@ -4,7 +4,7 @@
 
 ---
 
-# Live Demo - https://frontend-lac-mu.vercel.app/
+# Live Demo - https://shecare-ai-1-5jqe.onrender.com/
 
 # Demo Video - https://drive.google.com/file/d/14hf4J7hNjpJQ6Lfkwgm3Wma03QS-XO-2/view?usp=drive_link
 
@@ -55,7 +55,7 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repository-url>
+git clone <https://github.com/sonamnimje/Linkedin-sales-automation-tool.git>
 cd LinkedIn
 ```
 
