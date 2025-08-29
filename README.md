@@ -1,42 +1,146 @@
-LinkedIn Sales Automation Tool (MVP)
+# LinkedIn Sales Automation Tool (MVP) 🔗🤖
 
-Quickstart
+A compact prototype for generating outreach campaigns, simulating prospect sequences, and tracking basic campaign metrics. Built as a FastAPI backend and a React + Vite frontend, this repo is intentionally modular and ready for experimentation.
 
-Backend (FastAPI)
-- Open a terminal in `LinkedIn/`.
-- Create venv and install dependencies:
-  - Windows PowerShell:
-    - `python -m venv backend/.venv`
-    - `backend/.venv/Scripts/python -m pip install --upgrade pip`
-    - `backend/.venv/Scripts/pip install -r backend/requirements.txt`
-- Run the API:
-  - From `LinkedIn/backend/` run:
-    - `../backend/.venv/Scripts/python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
-- Health check: `http://127.0.0.1:8000/health`
-- Intake endpoint: `POST http://127.0.0.1:8000/api/campaigns/intake`
+## Quick overview
 
-Frontend (React + Vite)
-- Open a second terminal in `LinkedIn/frontend/`.
-- Install deps: `npm install`
-- Start dev server: `npm run dev`
-- App URL: `http://127.0.0.1:5173`
+- Purpose: Explore how NLP-driven templates, sequencing, and lightweight metrics can automate LinkedIn-style outreach.
+- Stack: Python (FastAPI) backend, React + Vite frontend, no production DB included (in-memory / stubbed data).
+- Status: MVP — many parts are stubbed for speed of prototyping.
 
-Frontend features
-- Home: shows backend health from `/health`.
-- Campaigns: form posts to `POST /api/campaigns/intake` and renders response.
-- Sequence: schedules steps via `POST /api/campaigns/sequence/start`, view stats via `GET /api/campaigns/sequence/stats`.
-- Metrics: displays `GET /api/campaigns/metrics` and can trigger `POST /api/campaigns/metrics/mock-reply`.
+## Table of contents
 
-Dev proxy
-- Vite is configured to proxy `/health` and `/api/**` to the FastAPI server at `http://127.0.0.1:8000`.
+- [What's included](#whats-included)
+- [Architecture](#architecture)
+- [Quickstart (local)](#quickstart-local)
+- [API reference (important endpoints)](#api-reference-important-endpoints)
+- [Development notes & todos](#development-notes--todos)
+- [Contributing](#contributing)
+- [License & credits](#license--credits)
 
-Test Flow
-1) Start backend (ensure health returns `{ "status": "ok" }`).
-2) Start frontend and open the app URL.
-3) Fill the Outreach Setup Form (e.g., Product: HR SaaS; Industry: SaaS; Roles: Head of HR, HR Manager; Size: 50-200; Region: India; Goal: Book a call; Voice: Friendly).
-4) Click Generate Preview. You should see a stubbed result with prospects count, best match, and sample messages.
+## What's included
+
+- backend/
+  - FastAPI app with routes for campaigns, sequences and metrics
+  - `services/` with simple NLP, scheduler and metrics helpers (mostly stubbed)
+- frontend/
+  - Vite + React app with a campaign form, preview, and a small dashboard
+
+## Architecture
+
+```
+backend/
+  requirements.txt
+  app/
+    main.py
+    routers/
+    services/
+frontend/
+  package.json
+  src/
+README.md
+```
+
+Flow: Frontend -> Backend API -> Stubbed NLP/Sequence -> JSON responses for preview and metrics.
+
+## Quickstart (local)
+
+Requirements
+- Python 3.10+ (recommended)
+- Node 16+ (or compatible)
+- npm
+
+### Backend (Windows PowerShell)
+
+Open PowerShell in the repo root and run:
+
+```powershell
+python -m venv backend/.venv
+backend/.venv/Scripts/python -m pip install --upgrade pip
+backend/.venv/Scripts/pip install -r backend/requirements.txt
+cd backend
+..\backend\.venv\Scripts\python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Endpoints to check
+- Health: http://127.0.0.1:8000/health
+
+### Backend (macOS / Linux)
+
+```bash
+python3 -m venv backend/.venv
+backend/.venv/bin/python -m pip install --upgrade pip
+backend/.venv/bin/pip install -r backend/requirements.txt
+cd backend
+../backend/.venv/bin/python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+### Frontend (Vite + React)
+
+Open a second terminal in `frontend/` and run:
+
+```bash
+npm install
+npm run dev
+```
+
+Default app URL: http://127.0.0.1:5173
 
 Notes
-- CORS is enabled for `http://localhost:5173` and `http://127.0.0.1:5173`.
-- NLP and sequencing are stubbed; see `backend/app/services/nlp.py`.
-- Next steps: integrate real profile analysis, scraping/API, scheduling, and a response dashboard.
+- The frontend calls the backend directly at `http://127.0.0.1:8000` (see `frontend/src/utils/api.js`). Ensure the backend is running locally or adjust the base URL.
+
+## API reference (important endpoints)
+
+- GET /health
+  - Quick health check. Returns `{ "status": "ok" }` when ready.
+- POST /api/campaigns/intake
+  - Submit a campaign configuration and receive a generated preview with simulated prospects and messages.
+- POST /api/campaigns/sequence/start
+  - Start a simulated sequence for a campaign (stubbed scheduler).
+- GET /api/campaigns/sequence/stats
+  - Get aggregated sequence stats.
+- GET /api/campaigns/metrics
+  - Retrieve metrics used by the dashboard.
+- POST /api/campaigns/metrics/mock-reply
+  - Emit a mock reply for testing metrics flows.
+- POST /api/auth/signup
+  - Create a user and return a bearer token.
+- POST /api/auth/login
+  - Authenticate a user and return a bearer token.
+- GET /api/auth/me
+  - Return the current user (requires `Authorization: Bearer <token>`).
+
+Tip: Open `backend/app/routers/campaigns.py` and `backend/app/routers/auth.py` to see expected request and response shapes.
+
+## Development notes & todos
+
+Current limitations
+- NLP and prospect sourcing are stubbed: see `backend/app/services/nlp.py`.
+- Sequencing is simulated: see `backend/app/services/scheduler.py`.
+- No database persistence by default — add SQLite/Postgres for real runs.
+
+Suggested next steps
+- Integrate a real profile-analysis or enrichment API for sourcing prospects.
+- Add persistence (SQLite for quick local dev, Postgres for production).
+- Add authentication and role-based access for team workflows.
+- Replace stubbed NLP with an LLM or hosted NLP API and add rate limiting.
+
+## Contributing
+
+Small contributions are welcome. Recommended flow:
+1. Fork the repo
+2. Create a descriptive branch (feature/xxxx)
+3. Add tests for backend changes
+4. Open a PR with a short description and screenshots if relevant
+
+## License & credits
+
+MIT-style (adjust to your preferred license).
+
+---
+
+Want extras?
+- I can add a short example JSON for `POST /api/campaigns/intake`.
+- I can add a small developer checklist (pre-commit hooks, linting).
+
+Tell me which you'd like and I'll add them.
